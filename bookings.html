@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}All Bookings - Admin{% endblock %}
+
+{% block content %}
+<div class="mb-8 flex justify-between items-center">
+    <div>
+        <h1 class="text-3xl font-serif font-bold text-white mb-2">System Bookings</h1>
+        <p class="text-gray-400">Monitor all activities across the platform.</p>
+    </div>
+    <a href="{{ url_for('admin.dashboard') }}" class="text-gray-400 hover:text-white flex items-center gap-1">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Dashboard
+    </a>
+</div>
+
+<div class="glass-panel text-white rounded-2xl overflow-hidden shadow-2xl border-white/10">
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-navy-800/80 text-gray-300 text-sm tracking-wider uppercase border-b border-gray-700/50">
+                    <th class="p-4 font-semibold">Booking ID</th>
+                    <th class="p-4 font-semibold">User</th>
+                    <th class="p-4 font-semibold">Type</th>
+                    <th class="p-4 font-semibold">Details</th>
+                    <th class="p-4 font-semibold">Price</th>
+                    <th class="p-4 font-semibold">Date</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-700/50 text-sm">
+                {% for booking in bookings %}
+                <tr class="hover:bg-navy-800/40 transition-colors">
+                    <td class="p-4 font-medium">#{{ booking.id }}</td>
+                    <td class="p-4 text-gray-300">{{ booking.user.username }}<br><span class="text-xs text-gray-500">{{ booking.user.email }}</span></td>
+                    <td class="p-4">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-navy-900 border border-gray-700 capitalize">
+                            {{ booking.service_type }}
+                        </span>
+                    </td>
+                    <td class="p-4 text-gray-300 max-w-xs truncate" title="{{ booking.details }}">{{ booking.details }}</td>
+                    <td class="p-4 font-bold text-white">${{ "%.2f"|format(booking.total_price) }}</td>
+                    <td class="p-4 text-gray-400">{{ booking.date_booked.strftime('%Y-%m-%d %H:%M') }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="p-8 text-center text-gray-500">
+                        <i data-lucide="clipboard-list" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                        No bookings have been made yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
